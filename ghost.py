@@ -51,8 +51,10 @@ class ghost(pygame.sprite.Sprite):
         self.trapped = True # Inside the middle room
         self.rect = [0,0,0,0]
         self.innerTick = 0
-        self.posx = 9
-        self.posy = 11
+        #self.posx = 9
+        #self.posy = 11
+        self.posx = 11
+        self.posy = 21
         self.baseX = self.board.rect.x + 10
         self.baseY = self.board.rect.y + 18
         self.boardMaxY = len(self.gmap)
