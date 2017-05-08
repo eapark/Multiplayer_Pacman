@@ -74,8 +74,8 @@ class pacman(pygame.sprite.Sprite):
         elif(self.movingDirection == "DOWN"):
             yoffset = round(self.innerTick*self.yratio/4.0)
         
-        self.rect.x = round(self.posx*self.xratio) + self.baseX + xoffset + round(12 -self.rect.width/2.0)
-        self.rect.y = round(self.posy*self.yratio) + self.baseY + yoffset + round(12 -self.rect.height/2.0)
+        self.rect.x = round(self.posx*self.xratio) + self.baseX + xoffset + round(11 -self.rect.width/2.0)
+        self.rect.y = round(self.posy*self.yratio) + self.baseY + yoffset + round(11 -self.rect.height/2.0)
         #self.rect.x = round(self.posx*self.xratio) + self.baseX + xoffset #+ round(10 -self.rect.width/2)
         #self.rect.y = round(self.posy*self.yratio) + self.baseY + yoffset #+ round(10 - self.rect.height/2)
     def updateSetDirection(self, direction):

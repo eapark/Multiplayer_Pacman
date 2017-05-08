@@ -20,6 +20,11 @@ class items():
         self.images["PACDOT"] = self.ss.image_at((3, 81, 2, 2), colorkey = self.black)
         self.images["POWERP"] = self.ss.image_at((8,79,7,7), colorkey = self.black)
         self.images["NONE"] = self.ss.image_at((17,81,2,2), colorkey = self.black)
+        for key in self.images.keys():
+                rect = self.images[key].get_rect()
+                w = round(rect.width*self.board.ratio)
+                h = round(rect.height*self.board.ratio)
+                self.images[key] = pygame.transform.scale(self.images[key], (int(w), int(h)))
         for i in range(len(self.imap)):
             temp = list()
             for j in range(len(self.imap[0])):
@@ -51,19 +56,13 @@ class item(pygame.sprite.Sprite):
         self.yratio = (self.board.rect.height - 34.0)/len(self.imap)
         self.xratio = (self.board.rect.width - 10)/len(self.imap[0])
         self.image = self.images[self.iType]
-
         self.rect = self.image.get_rect()
-        w = round(self.rect.width*self.board.ratio)
-        h = round(self.rect.height*self.board.ratio)
-
-
-        self.image = pygame.transform.scale(self.image, (int(w), int(h)))
         
         self.baseX = self.board.rect.x + 10
         self.baseY = self.board.rect.y + 18
 
-        self.rect.x = round(self.posx*self.xratio) + self.baseX + round(10-self.rect.width/2.0)
-        self.rect.y = round(self.posy*self.yratio) + self.baseY + round(10-self.rect.height/2.0)
+        self.rect.x = round(self.posx*self.xratio) + self.baseX + round(11-self.rect.width/2.0)
+        self.rect.y = round(self.posy*self.yratio) + self.baseY + round(11-self.rect.height/2.0)
     def update(self):
         self.image = self.images[self.iType]
     def changeType(self, iType):

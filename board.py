@@ -10,7 +10,7 @@ class board(pygame.sprite.Sprite):
         self.image = self.ss.image_at((371,4,164,212), colorkey=(0,0,0))
         self.rect = self.image.get_rect()
         self.originalHeight = self.rect.height
-        self.ratio = self.gs.height/self.rect.height
+        self.ratio = self.gs.height/float(self.rect.height)
 
         self.rect.height = round(self.rect.height*self.ratio - 10)
         self.ratio = self.rect.height/self.originalHeight
