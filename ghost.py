@@ -13,6 +13,7 @@ class ghost(pygame.sprite.Sprite):
         self.yratio = (self.board.rect.height - 34.0)/len(self.gmap)
         self.xratio = (self.board.rect.width -10)/len(self.gmap[0])
         self.stuck = False
+        self.dead = False
         self.spritefile = "pacman.sprite"
         ss = spritesheet(self.spritefile)
         self.black = (0,0,0)
@@ -42,13 +43,20 @@ class ghost(pygame.sprite.Sprite):
         for key, imageL in self.ghostImages.iteritems():
             for n in range(4):
                 rect = imageL[n].get_rect()
-                w = round(rect.width*self.board.ratio*0.8)
-                h = round(rect.height*self.board.ratio*0.8)
+                w=round(rect.width*self.board.ratio*0.8)
+                h=round(rect.height*self.board.ratio*0.8)
+                imageL[n] = pygame.transform.scale(imageL[n], (int(w), int(h)))
+        for key, imageL in self.ghostSpooked.iteritems():
+            for n in range(4):
+                rect = imageL[n].get_rect()
+                w=round(rect.width*self.board.ratio*0.8)
+                h=round(rect.height*self.board.ratio*0.8)
                 imageL[n] = pygame.transform.scale(imageL[n], (int(w), int(h)))
         
         self.moving = True
         self.spooked = False
         self.trapped = True # Inside the middle room
+        self.blink = False
         self.rect = [0,0,0,0]
         self.innerTick = 0
         #self.posx = 9
@@ -187,11 +195,16 @@ class ghost(pygame.sprite.Sprite):
                         else:
                             self.moving = False
         
+            if not self.spooked:
+                self.image = self.ghostImages[self.movingDirection][self.innerTick]
+            elif self.spooked and not self.blink:
+                self.image = self.ghostSpooked["V1"][self.innerTick]
+            elif self.spooked and self.blink:
+                self.image = self.ghostSpooked["V2"][self.innerTick]
+            
             self.calcRect()
-            self.image = self.ghostImages[self.movingDirection][self.innerTick]
     def setMode(self, mode):
         self.mode = mode
-
     
 
         

@@ -37,7 +37,6 @@ class items():
         return self.itemsList
     def decreaseItems(self):
         self.itemsCount -= 1
-        print("items count is ", self.itemsCount)
         if(self.itemsCount == 0):
             self.gs.pacmanWon()
 

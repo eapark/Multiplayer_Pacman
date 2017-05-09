@@ -18,6 +18,8 @@ class pacman(pygame.sprite.Sprite):
         ss = spritesheet(self.spritefile)
         self.black = (0,0,0)
         self.dead = False
+        self.powered = False # True if ate power pellet
+        self.atePowerPTime = 0 # Time when the power pellet was consumed
         self.pacmanImages = dict()
         # Below we load a sprite twice to keep the order in which it moves. We sacrifice memory for easier coding
         #self.pacmanImages["RIGHT"] = ss.images_at(((20,90,14,14), (3,90,14,14),(20,90,14,14),(35,90,9,14)), colorkey=self.black)
@@ -56,12 +58,13 @@ class pacman(pygame.sprite.Sprite):
         self.baseY = self.board.rect.y + 18
         self.boardMaxY = len(self.gmap)-1
         self.boardMaxX = len(self.gmap[0])-1
-        self.movingDirection = "RIGHT"
-        self.setDirection = "RIGHT"
+        self.movingDirection = "RIGHT" # Current direction moving in
+        self.setDirection = "RIGHT"    # Next direction to switch to
         self.iter = 0
         self.image = self.pacmanImages[self.movingDirection][1]
         self.toTick = True
     def calcRect(self):
+        # Re-scale the sprites
         self.rect = self.image.get_rect()
         xoffset = 0
         yoffset = 0
@@ -78,11 +81,13 @@ class pacman(pygame.sprite.Sprite):
         self.rect.y = round(self.posy*self.yratio) + self.baseY + yoffset + round(11 -self.rect.height/2.0)
         #self.rect.x = round(self.posx*self.xratio) + self.baseX + xoffset #+ round(10 -self.rect.width/2)
         #self.rect.y = round(self.posy*self.yratio) + self.baseY + yoffset #+ round(10 - self.rect.height/2)
+
     def updateSetDirection(self, direction):
         if self.mode == 1:
             #print("Updating direction to: ",direction)
             #print("moving direction is: ", self.movingDirection)
             self.setDirection = direction
+
     def update(self):
         if(self.mode == 1):
             if(self.dead):
@@ -185,13 +190,37 @@ class pacman(pygame.sprite.Sprite):
                                 self.moving = True
                             else:
                                 self.moving = False
-                    # Collide
-                    self.items[self.posy][self.posx].collide() 
+
+                    if self.powered:
+                        # De-power the ghost 8 seconds after eating power pellet
+                        if(pygame.time.get_ticks() - self.atePowerPTime > 8000):
+                            self.powered = False
+                            for g in self.ghosts:
+                                g.spooked = False
+                        # Blink the ghost 6 seconds after eating power pellet
+                        if(pygame.time.get_ticks() - self.atePowerPTime > 6000):
+                            for g in self.ghosts:
+                                g.blink = True
+
+
+                    # Collide with item and ghosts
+                    if(self.items[self.posy][self.posx].iType == "POWERP"):
+                        self.powered = True
+                        # Keep track of time the item was consumed
+                        self.atePowerPTime = pygame.time.get_ticks()
+                        # Turn all ghosts to 'spooked'
+                        for g in self.ghosts:
+                            g.spooked = True
+
+                    self.items[self.posy][self.posx].collide()
+
                     for g in self.ghosts:
-                        if(self.posx == g.posx and self.posy == g.posy):
+                        if(self.posx == g.posx and self.posy == g.posy and not self.powered):
                             self.dead = True
                             self.moving = False
                             #self.innerTick = 0
+                        elif(self.posx == g.posx and self.posy == g.posy and self.powered):
+                            g.dead = True
                 self.image = self.pacmanImages[self.movingDirection][self.innerTick]
             self.calcRect()
     def setMode(self, mode):
