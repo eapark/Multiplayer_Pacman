@@ -59,10 +59,10 @@ class ghost(pygame.sprite.Sprite):
         self.blink = False
         self.rect = [0,0,0,0]
         self.innerTick = 0
-        self.posx = 9
-        self.posy = 11
-        #self.posx = 11
-        #self.posy = 21
+        #self.posx = 9
+        #self.posy = 11
+        self.posx = 11
+        self.posy = 21
         self.baseX = self.board.rect.x + 10
         self.baseY = self.board.rect.y + 18
         self.boardMaxY = len(self.gmap)
@@ -89,11 +89,11 @@ class ghost(pygame.sprite.Sprite):
         self.rect.y = round(self.posy*self.yratio) + self.baseY + yoffset
     def updateSetDirection(self, direction):
         if self.mode == 1:
-            #print("Ghost:Updating direction to: ",direction)
+            #print("Updating direction to: ",direction)
             #print("moving direction is: ", self.movingDirection)
             self.setDirection = direction
     def release(self):
-        #print("Releasing")
+        print("Releasing")
         self.trapped = False
     def update(self):
         if(self.mode == 1):
@@ -174,7 +174,7 @@ class ghost(pygame.sprite.Sprite):
                         ##print(self.gmap[self.posx+1])
                         if( self.gmap[self.posy][self.posx+1] ==1 or self.gmap[self.posy][self.posx+1] == 3): # not a wall
                             self.moving = True
-                            #print("self.posx", self.posx)
+                            print("self.posx", self.posx)
                         else:
                             self.moving = False
                     else:

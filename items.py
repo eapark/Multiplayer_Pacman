@@ -70,4 +70,6 @@ class item(pygame.sprite.Sprite):
         if(self.iType != "NONE"):
             self.iType = "NONE"
             self.parent.decreaseItems()
-        
+
+
+

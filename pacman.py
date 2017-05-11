@@ -1,6 +1,7 @@
 import pygame
 from pygame.locals import *
 from spritesheet import *
+import json
 
 class pacman(pygame.sprite.Sprite):
     def __init__(self, gs, mode, gmap, board, items, ghosts):
@@ -84,7 +85,6 @@ class pacman(pygame.sprite.Sprite):
 
     def updateSetDirection(self, direction):
         if self.mode == 1:
-            #print("Updating direction to: ",direction)
             #print("moving direction is: ", self.movingDirection)
             self.setDirection = direction
 
@@ -92,7 +92,7 @@ class pacman(pygame.sprite.Sprite):
         if(self.mode == 1):
             if(self.dead):
                 if(self.deadTick < len(self.deathImages)):
-                    print("Pac is dead")
+                    #print("Pac is dead")
                     self.image = self.deathImages[int(self.deadTick)]
                     self.deadTick += 1
                 else:
@@ -221,6 +221,8 @@ class pacman(pygame.sprite.Sprite):
                             #self.innerTick = 0
                         elif(self.posx == g.posx and self.posy == g.posy and self.powered):
                             g.dead = True
+                            self.gs.pacmanWon()
+
                 self.image = self.pacmanImages[self.movingDirection][self.innerTick]
             self.calcRect()
     def setMode(self, mode):
